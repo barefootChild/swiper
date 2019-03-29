@@ -3,11 +3,11 @@
  * Most modern mobile touch slider and framework with hardware accelerated transitions
  * http://www.idangero.us/swiper/
  *
- * Copyright 2014-2018 Vladimir Kharlampidi
+ * Copyright 2014-2019 Vladimir Kharlampidi
  *
  * Released under the MIT License
  *
- * Released on: December 19, 2018
+ * Released on: March 1, 2019
  */
 
 (function (global, factory) {
@@ -1764,7 +1764,9 @@
     if (previousRealIndex !== realIndex) {
       swiper.emit('realIndexChange');
     }
-    swiper.emit('slideChange');
+    if (swiper.initialized || swiper.runCallbacksOnInit) {
+      swiper.emit('slideChange');
+    }
   }
 
   function updateClickedSlide (e) {
@@ -1790,7 +1792,9 @@
       swiper.clickedIndex = undefined;
       return;
     }
+    swiper.allowStartPkg = true;
     if (params.slideToClickedSlide && swiper.clickedIndex !== undefined && swiper.clickedIndex !== swiper.activeIndex) {
+      swiper.allowStartPkg = false;
       swiper.slideToClickedSlide();
     }
   }
@@ -2620,8 +2624,8 @@
       if (!$(e).closest(params.swipeHandler)[0]) { return; }
     }
 
-    touches.currentX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
-    touches.currentY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
+    touches.currentX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+    touches.currentY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY;
     var startX = touches.currentX;
     var startY = touches.currentY;
 
@@ -2686,8 +2690,8 @@
       return;
     }
     if (data.isTouchEvent && e.type === 'mousemove') { return; }
-    var pageX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.pageX;
-    var pageY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.pageY;
+    var pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+    var pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
     if (e.preventedByNestedSwiper) {
       touches.startX = pageX;
       touches.startY = pageY;
@@ -3396,6 +3400,7 @@
     var $el = swiper.$el;
     var suffixes = [];
 
+    suffixes.push('initialized');
     suffixes.push(params.direction);
 
     if (params.freeMode) {

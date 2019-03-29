@@ -23,7 +23,9 @@ export default function (e) {
     swiper.clickedIndex = undefined;
     return;
   }
+  swiper.allowStartPkg = true;
   if (params.slideToClickedSlide && swiper.clickedIndex !== undefined && swiper.clickedIndex !== swiper.activeIndex) {
+    swiper.allowStartPkg = false;
     swiper.slideToClickedSlide();
   }
 }

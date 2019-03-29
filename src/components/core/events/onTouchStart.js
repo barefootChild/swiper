@@ -23,8 +23,8 @@ export default function (event) {
     if (!$(e).closest(params.swipeHandler)[0]) return;
   }
 
-  touches.currentX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
-  touches.currentY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
+  touches.currentX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+  touches.currentY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY;
   const startX = touches.currentX;
   const startY = touches.currentY;
 

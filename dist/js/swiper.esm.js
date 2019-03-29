@@ -3,11 +3,11 @@
  * Most modern mobile touch slider and framework with hardware accelerated transitions
  * http://www.idangero.us/swiper/
  *
- * Copyright 2014-2018 Vladimir Kharlampidi
+ * Copyright 2014-2019 Vladimir Kharlampidi
  *
  * Released under the MIT License
  *
- * Released on: December 19, 2018
+ * Released on: March 1, 2019
  */
 
 import { $, addClass, removeClass, hasClass, toggleClass, attr, removeAttr, data, transform, transition, on, off, trigger, transitionEnd, outerWidth, outerHeight, offset, css, each, html, text, is, index, eq, append, prepend, next, nextAll, prev, prevAll, parent, parents, closest, find, children, remove, add, styles } from 'dom7/dist/dom7.modular';
@@ -937,7 +937,9 @@ function updateActiveIndex (newActiveIndex) {
   if (previousRealIndex !== realIndex) {
     swiper.emit('realIndexChange');
   }
-  swiper.emit('slideChange');
+  if (swiper.initialized || swiper.runCallbacksOnInit) {
+    swiper.emit('slideChange');
+  }
 }
 
 function updateClickedSlide (e) {
@@ -963,7 +965,9 @@ function updateClickedSlide (e) {
     swiper.clickedIndex = undefined;
     return;
   }
+  swiper.allowStartPkg = true;
   if (params.slideToClickedSlide && swiper.clickedIndex !== undefined && swiper.clickedIndex !== swiper.activeIndex) {
+    swiper.allowStartPkg = false;
     swiper.slideToClickedSlide();
   }
 }
@@ -1739,8 +1743,8 @@ function onTouchStart (event) {
     if (!$(e).closest(params.swipeHandler)[0]) return;
   }
 
-  touches.currentX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
-  touches.currentY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
+  touches.currentX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+  touches.currentY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY;
   const startX = touches.currentX;
   const startY = touches.currentY;
 
@@ -1803,8 +1807,8 @@ function onTouchMove (event) {
     return;
   }
   if (data$$1.isTouchEvent && e.type === 'mousemove') return;
-  const pageX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.pageX;
-  const pageY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.pageY;
+  const pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+  const pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
   if (e.preventedByNestedSwiper) {
     touches.startX = pageX;
     touches.startY = pageY;
@@ -2503,6 +2507,7 @@ function addClasses () {
   } = swiper;
   const suffixes = [];
 
+  suffixes.push('initialized');
   suffixes.push(params.direction);
 
   if (params.freeMode) {
