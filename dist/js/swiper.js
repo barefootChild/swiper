@@ -7,7 +7,7 @@
  *
  * Released under the MIT License
  *
- * Released on: March 1, 2019
+ * Released on: November 22, 2019
  */
 
 (function (global, factory) {
@@ -7667,7 +7667,13 @@
         var slideOffset = $slideEl[0].swiperSlideOffset;
         var offsetMultiplier = ((center - slideOffset - (slideSize / 2)) / slideSize) * params.modifier;
 
-        var rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
+        //self config for gamebox
+        var gameboxRotate = swiper.swipeDirection === 'next' ? 12 : -12;
+        var rotateVar = Math.abs(offsetMultiplier) % 1;
+        var configForgamebox = rotate === 0;
+        var slideOpacity = Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5);
+
+        var rotateY = isHorizontal ? (configForgamebox ? gameboxRotate * Math.abs(Math.abs(rotateVar-0.5)-0.5)*2 : rotate * offsetMultiplier) : 0;
         var rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
         // var rotateZ = 0
         var translateZ = -translate * Math.abs(offsetMultiplier);
@@ -7684,7 +7690,7 @@
 
         var slideTransform = "translate3d(" + translateX + "px," + translateY + "px," + translateZ + "px)  rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg)";
 
-        $slideEl.transform(slideTransform);
+        $slideEl.css({ opacity: slideOpacity }).transform(slideTransform);
         $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
         if (params.slideShadows) {
           // Set shadows

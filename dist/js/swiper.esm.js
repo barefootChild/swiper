@@ -7,7 +7,7 @@
  *
  * Released under the MIT License
  *
- * Released on: March 1, 2019
+ * Released on: November 22, 2019
  */
 
 import { $, addClass, removeClass, hasClass, toggleClass, attr, removeAttr, data, transform, transition, on, off, trigger, transitionEnd, outerWidth, outerHeight, offset, css, each, html, text, is, index, eq, append, prepend, next, nextAll, prev, prevAll, parent, parents, closest, find, children, remove, add, styles } from 'dom7/dist/dom7.modular';
@@ -6703,7 +6703,13 @@ const Coverflow = {
       const slideOffset = $slideEl[0].swiperSlideOffset;
       const offsetMultiplier = ((center - slideOffset - (slideSize / 2)) / slideSize) * params.modifier;
 
-      let rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
+      //self config for gamebox
+      let gameboxRotate = swiper.swipeDirection === 'next' ? 12 : -12;
+      let rotateVar = Math.abs(offsetMultiplier) % 1;
+      let configForgamebox = rotate === 0;
+      let slideOpacity = Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5);
+
+      let rotateY = isHorizontal ? (configForgamebox ? gameboxRotate * Math.abs(Math.abs(rotateVar-0.5)-0.5)*2 : rotate * offsetMultiplier) : 0;
       let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
       // var rotateZ = 0
       let translateZ = -translate * Math.abs(offsetMultiplier);
@@ -6720,7 +6726,7 @@ const Coverflow = {
 
       const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
-      $slideEl.transform(slideTransform);
+      $slideEl.css({ opacity: slideOpacity }).transform(slideTransform);
       $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
       if (params.slideShadows) {
         // Set shadows
