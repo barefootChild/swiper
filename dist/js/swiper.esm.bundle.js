@@ -3,11 +3,11 @@
  * Most modern mobile touch slider and framework with hardware accelerated transitions
  * http://www.idangero.us/swiper/
  *
- * Copyright 2014-2019 Vladimir Kharlampidi
+ * Copyright 2014-2020 Vladimir Kharlampidi
  *
  * Released under the MIT License
  *
- * Released on: November 22, 2019
+ * Released on: January 3, 2020
  */
 
 import { $, addClass, removeClass, hasClass, toggleClass, attr, removeAttr, data, transform, transition, on, off, trigger, transitionEnd, outerWidth, outerHeight, offset, css, each, html, text, is, index, eq, append, prepend, next, nextAll, prev, prevAll, parent, parents, closest, find, children, remove, add, styles } from 'dom7/dist/dom7.modular';
@@ -1893,7 +1893,7 @@ function onTouchMove (event) {
     return;
   }
   swiper.allowClick = false;
-  e.preventDefault();
+  // e.preventDefault();
   if (params.touchMoveStopPropagation && !params.nested) {
     e.stopPropagation();
   }
@@ -6707,7 +6707,7 @@ const Coverflow = {
       let gameboxRotate = swiper.swipeDirection === 'next' ? 12 : -12;
       let rotateVar = Math.abs(offsetMultiplier) % 1;
       let configForgamebox = rotate === 0;
-      let slideOpacity = Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5);
+      let slideOpacity = params.gameboxOpacity ? Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5) : 1;
 
       let rotateY = isHorizontal ? (configForgamebox ? gameboxRotate * Math.abs(Math.abs(rotateVar-0.5)-0.5)*2 : rotate * offsetMultiplier) : 0;
       let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;

@@ -3,11 +3,11 @@
  * Most modern mobile touch slider and framework with hardware accelerated transitions
  * http://www.idangero.us/swiper/
  *
- * Copyright 2014-2019 Vladimir Kharlampidi
+ * Copyright 2014-2020 Vladimir Kharlampidi
  *
  * Released under the MIT License
  *
- * Released on: November 22, 2019
+ * Released on: January 3, 2020
  */
 
 (function (global, factory) {
@@ -2776,7 +2776,7 @@
       return;
     }
     swiper.allowClick = false;
-    e.preventDefault();
+    // e.preventDefault();
     if (params.touchMoveStopPropagation && !params.nested) {
       e.stopPropagation();
     }
@@ -7671,7 +7671,7 @@
         var gameboxRotate = swiper.swipeDirection === 'next' ? 12 : -12;
         var rotateVar = Math.abs(offsetMultiplier) % 1;
         var configForgamebox = rotate === 0;
-        var slideOpacity = Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5);
+        var slideOpacity = params.gameboxOpacity ? Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5) : 1;
 
         var rotateY = isHorizontal ? (configForgamebox ? gameboxRotate * Math.abs(Math.abs(rotateVar-0.5)-0.5)*2 : rotate * offsetMultiplier) : 0;
         var rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;

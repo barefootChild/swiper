@@ -25,7 +25,7 @@ const Coverflow = {
       let gameboxRotate = swiper.swipeDirection === 'next' ? 12 : -12
       let rotateVar = Math.abs(offsetMultiplier) % 1
       let configForgamebox = rotate === 0
-      let slideOpacity = Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5)
+      let slideOpacity = params.gameboxOpacity ? Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5) : 1
 
       let rotateY = isHorizontal ? (configForgamebox ? gameboxRotate * Math.abs(Math.abs(rotateVar-0.5)-0.5)*2 : rotate * offsetMultiplier) : 0;
       let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
