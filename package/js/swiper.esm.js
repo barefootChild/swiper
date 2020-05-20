@@ -7,11 +7,7 @@
  *
  * Released under the MIT License
  *
-<<<<<<< HEAD:dist/js/swiper.esm.js
- * Released on: January 3, 2020
-=======
- * Released on: May 15, 2020
->>>>>>> master:package/js/swiper.esm.js
+ * Released on: May 20, 2020
  */
 
 import { $, addClass, removeClass, hasClass, toggleClass, attr, removeAttr, data, transform, transition as transition$1, on, off, trigger, transitionEnd as transitionEnd$1, outerWidth, outerHeight, offset, css, each, html, text, is, index, eq, append, prepend, next, nextAll, prev, prevAll, parent, parents, closest, find, children, filter, remove, add, styles } from 'dom7/dist/dom7.modular';
@@ -963,11 +959,7 @@ function updateActiveIndex (newActiveIndex) {
   if (previousRealIndex !== realIndex) {
     swiper.emit('realIndexChange');
   }
-<<<<<<< HEAD:dist/js/swiper.esm.js
-  if (swiper.initialized || swiper.runCallbacksOnInit) {
-=======
   if (swiper.initialized || swiper.params.runCallbacksOnInit) {
->>>>>>> master:package/js/swiper.esm.js
     swiper.emit('slideChange');
   }
 }
@@ -2001,16 +1993,13 @@ function onTouchMove (event) {
     }
     return;
   }
-<<<<<<< HEAD:dist/js/swiper.esm.js
-  if (data$$1.isTouchEvent && e.type === 'mousemove') return;
+  if (data.isTouchEvent && e.type === 'mousemove') return;
   const pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
   const pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
-=======
-  if (data.isTouchEvent && e.type !== 'touchmove') return;
-  const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
-  const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
-  const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
->>>>>>> master:package/js/swiper.esm.js
+  // if (data.isTouchEvent && e.type !== 'touchmove') return;
+  // const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
+  // const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
+  // const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
   if (e.preventedByNestedSwiper) {
     touches.startX = pageX;
     touches.startY = pageY;
@@ -2095,13 +2084,10 @@ function onTouchMove (event) {
     return;
   }
   swiper.allowClick = false;
-<<<<<<< HEAD:dist/js/swiper.esm.js
   // e.preventDefault();
-=======
   if (!params.cssMode && e.cancelable) {
     e.preventDefault();
   }
->>>>>>> master:package/js/swiper.esm.js
   if (params.touchMoveStopPropagation && !params.nested) {
     e.stopPropagation();
   }

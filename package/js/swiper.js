@@ -7,7 +7,7 @@
  *
  * Released under the MIT License
  *
- * Released on: May 15, 2020
+ * Released on: May 20, 2020
  */
 
 (function (global, factory) {
@@ -926,7 +926,7 @@
           }
           try {
             delete object[key];
-          } catch (e) {
+          } catch (e$1) {
             // something got wrong
           }
         });
@@ -1880,7 +1880,9 @@
         swiper.clickedIndex = undefined;
         return;
       }
+      swiper.allowStartPkg = true;
       if (params.slideToClickedSlide && swiper.clickedIndex !== undefined && swiper.clickedIndex !== swiper.activeIndex) {
+        swiper.allowStartPkg = false;
         swiper.slideToClickedSlide();
       }
     }
@@ -2877,8 +2879,8 @@
         if (!$targetEl.closest(params.swipeHandler)[0]) { return; }
       }
 
-      touches.currentX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
-      touches.currentY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
+      touches.currentX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+      touches.currentY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY;
       var startX = touches.currentX;
       var startY = touches.currentY;
 
@@ -2942,10 +2944,13 @@
         }
         return;
       }
-      if (data.isTouchEvent && e.type !== 'touchmove') { return; }
-      var targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
-      var pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
-      var pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
+      if (data.isTouchEvent && e.type === 'mousemove') { return; }
+      var pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+      var pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
+      // if (data.isTouchEvent && e.type !== 'touchmove') return;
+      // const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
+      // const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
+      // const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
       if (e.preventedByNestedSwiper) {
         touches.startX = pageX;
         touches.startY = pageY;
@@ -3030,6 +3035,7 @@
         return;
       }
       swiper.allowClick = false;
+      // e.preventDefault();
       if (!params.cssMode && e.cancelable) {
         e.preventDefault();
       }
@@ -8438,7 +8444,13 @@
           var slideOffset = $slideEl[0].swiperSlideOffset;
           var offsetMultiplier = ((center - slideOffset - (slideSize / 2)) / slideSize) * params.modifier;
 
-          var rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
+          //self config for gamebox
+          var gameboxRotate = swiper.swipeDirection === 'next' ? 12 : -12;
+          var rotateVar = Math.abs(offsetMultiplier) % 1;
+          var configForgamebox = rotate === 0;
+          var slideOpacity = params.gameboxOpacity ? Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5) : 1;
+
+          var rotateY = isHorizontal ? (configForgamebox ? gameboxRotate * Math.abs(Math.abs(rotateVar-0.5)-0.5)*2 : rotate * offsetMultiplier) : 0;
           var rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
           // var rotateZ = 0
           var translateZ = -translate * Math.abs(offsetMultiplier);
@@ -8460,7 +8472,7 @@
 
           var slideTransform = "translate3d(" + translateX + "px," + translateY + "px," + translateZ + "px)  rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg)";
 
-          $slideEl.transform(slideTransform);
+          $slideEl.css({ opacity: slideOpacity }).transform(slideTransform);
           $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
           if (params.slideShadows) {
             // Set shadows

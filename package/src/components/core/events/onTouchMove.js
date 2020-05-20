@@ -14,10 +14,13 @@ export default function (event) {
     }
     return;
   }
-  if (data.isTouchEvent && e.type !== 'touchmove') return;
-  const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
-  const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
-  const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
+  if (data.isTouchEvent && e.type === 'mousemove') return;
+  const pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+  const pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
+  // if (data.isTouchEvent && e.type !== 'touchmove') return;
+  // const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
+  // const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
+  // const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
   if (e.preventedByNestedSwiper) {
     touches.startX = pageX;
     touches.startY = pageY;
@@ -102,6 +105,7 @@ export default function (event) {
     return;
   }
   swiper.allowClick = false;
+  // e.preventDefault();
   if (!params.cssMode && e.cancelable) {
     e.preventDefault();
   }

@@ -7,7 +7,7 @@
  *
  * Released under the MIT License
  *
- * Released on: May 15, 2020
+ * Released on: May 20, 2020
  */
 
 import { $, addClass, removeClass, hasClass, toggleClass, attr, removeAttr, data, transform, transition as transition$1, on, off, trigger, transitionEnd as transitionEnd$1, outerWidth, outerHeight, offset, css, each, html, text, is, index, eq, append, prepend, next, nextAll, prev, prevAll, parent, parents, closest, find, children, filter, remove, add, styles } from 'dom7/dist/dom7.modular';
@@ -1993,13 +1993,13 @@ function onTouchMove (event) {
     }
     return;
   }
-  // if (data$$1.isTouchEvent && e.type === 'mousemove') return;
-  // const pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
-  // const pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
-  if (data.isTouchEvent && e.type !== 'touchmove') return;
-  const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
-  const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
-  const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
+  if (data.isTouchEvent && e.type === 'mousemove') return;
+  const pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+  const pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
+  // if (data.isTouchEvent && e.type !== 'touchmove') return;
+  // const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
+  // const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
+  // const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
   if (e.preventedByNestedSwiper) {
     touches.startX = pageX;
     touches.startY = pageY;

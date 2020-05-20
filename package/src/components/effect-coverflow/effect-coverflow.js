@@ -21,7 +21,13 @@ const Coverflow = {
       const slideOffset = $slideEl[0].swiperSlideOffset;
       const offsetMultiplier = ((center - slideOffset - (slideSize / 2)) / slideSize) * params.modifier;
 
-      let rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
+      //self config for gamebox
+      let gameboxRotate = swiper.swipeDirection === 'next' ? 12 : -12
+      let rotateVar = Math.abs(offsetMultiplier) % 1
+      let configForgamebox = rotate === 0
+      let slideOpacity = params.gameboxOpacity ? Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5) : 1
+
+      let rotateY = isHorizontal ? (configForgamebox ? gameboxRotate * Math.abs(Math.abs(rotateVar-0.5)-0.5)*2 : rotate * offsetMultiplier) : 0;
       let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
       // var rotateZ = 0
       let translateZ = -translate * Math.abs(offsetMultiplier);
@@ -43,7 +49,7 @@ const Coverflow = {
 
       const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
-      $slideEl.transform(slideTransform);
+      $slideEl.css({ opacity: slideOpacity }).transform(slideTransform);
       $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
       if (params.slideShadows) {
         // Set shadows

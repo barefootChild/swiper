@@ -7,7 +7,7 @@
  *
  * Released under the MIT License
  *
- * Released on: May 15, 2020
+ * Released on: May 20, 2020
  */
 
 /**
@@ -1815,7 +1815,9 @@ function updateClickedSlide (e) {
     swiper.clickedIndex = undefined;
     return;
   }
+  swiper.allowStartPkg = true;
   if (params.slideToClickedSlide && swiper.clickedIndex !== undefined && swiper.clickedIndex !== swiper.activeIndex) {
+    swiper.allowStartPkg = false;
     swiper.slideToClickedSlide();
   }
 }
@@ -2756,8 +2758,8 @@ function onTouchStart (event) {
     if (!$targetEl.closest(params.swipeHandler)[0]) return;
   }
 
-  touches.currentX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
-  touches.currentY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
+  touches.currentX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+  touches.currentY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY;
   const startX = touches.currentX;
   const startY = touches.currentY;
 
@@ -2819,10 +2821,13 @@ function onTouchMove (event) {
     }
     return;
   }
-  if (data.isTouchEvent && e.type !== 'touchmove') return;
-  const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
-  const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
-  const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
+  if (data.isTouchEvent && e.type === 'mousemove') return;
+  const pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+  const pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
+  // if (data.isTouchEvent && e.type !== 'touchmove') return;
+  // const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
+  // const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
+  // const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
   if (e.preventedByNestedSwiper) {
     touches.startX = pageX;
     touches.startY = pageY;
@@ -2907,6 +2912,7 @@ function onTouchMove (event) {
     return;
   }
   swiper.allowClick = false;
+  // e.preventDefault();
   if (!params.cssMode && e.cancelable) {
     e.preventDefault();
   }
@@ -8230,7 +8236,13 @@ const Coverflow = {
       const slideOffset = $slideEl[0].swiperSlideOffset;
       const offsetMultiplier = ((center - slideOffset - (slideSize / 2)) / slideSize) * params.modifier;
 
-      let rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
+      //self config for gamebox
+      let gameboxRotate = swiper.swipeDirection === 'next' ? 12 : -12;
+      let rotateVar = Math.abs(offsetMultiplier) % 1;
+      let configForgamebox = rotate === 0;
+      let slideOpacity = params.gameboxOpacity ? Math.max(1 - Math.abs(offsetMultiplier) * 0.5, 0.5) : 1;
+
+      let rotateY = isHorizontal ? (configForgamebox ? gameboxRotate * Math.abs(Math.abs(rotateVar-0.5)-0.5)*2 : rotate * offsetMultiplier) : 0;
       let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
       // var rotateZ = 0
       let translateZ = -translate * Math.abs(offsetMultiplier);
@@ -8252,7 +8264,7 @@ const Coverflow = {
 
       const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
-      $slideEl.transform(slideTransform);
+      $slideEl.css({ opacity: slideOpacity }).transform(slideTransform);
       $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
       if (params.slideShadows) {
         // Set shadows
